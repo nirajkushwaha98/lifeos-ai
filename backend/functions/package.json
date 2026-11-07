@@ -1,0 +1,20 @@
+{
+  "name": "lifeos-ai-functions",
+  "description": "Secure AI proxy for LifeOS AI: Gemini with model fallback, Claude as last resort (Firebase Cloud Functions v2)",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "test": "node --test test/",
+    "serve": "firebase emulators:start --only functions,firestore,auth",
+    "deploy": "firebase deploy --only functions,firestore:rules,firestore:indexes",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.3.2"
+  }
+}

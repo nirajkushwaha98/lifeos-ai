@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// LifeOS AI currently keeps documents and profile photos in app-private device storage and does
+// NOT upload them. These rules are locked down so that, if Storage is enabled later, only the
+// owner can access files under users/{uid}/ and nothing is ever publicly readable.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{uid}/{allPaths=**} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null && request.auth.uid == uid
+        && request.resource.size < 25 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf');
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

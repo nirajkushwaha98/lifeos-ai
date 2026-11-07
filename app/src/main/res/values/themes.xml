@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lifeos_bg">#080B16</color>
+
+    <style name="Theme.LifeOS" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/lifeos_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.LifeOS.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/lifeos_bg</item>
+        <!-- Same mark as the launcher icon foreground (content sits inside the splash mask circle) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.LifeOS</item>
+    </style>
+</resources>

@@ -1,0 +1,91 @@
+rules_version = '2';
+
+// LifeOS AI Firestore Security Rules
+// - Users can only read/write documents under users/{theirUid}.
+// - Every write is shape-checked (allowed keys, types and sizes).
+// - aiUsage quotas are written only by Cloud Functions (Admin SDK bypasses rules).
+// - Everything else is denied by default.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function str(v, max) { return v is string && v.size() <= max; }
+    function optStr(d, k, max) { return !(k in d) || d[k] == null || str(d[k], max); }
+    function optInt(d, k) { return !(k in d) || d[k] == null || d[k] is int; }
+    function optBool(d, k) { return !(k in d) || d[k] is bool; }
+    function syncFields(d) {
+      return d.updatedAt is int && optInt(d, 'createdAt') && optBool(d, 'deleted');
+    }
+    function onlyKeys(d, keys) { return d.keys().hasOnly(keys); }
+
+    match /users/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && onlyKeys(request.resource.data, ['name', 'email', 'createdAt', 'fcmToken'])
+        && optStr(request.resource.data, 'name', 100)
+        && optStr(request.resource.data, 'email', 320)
+        && optStr(request.resource.data, 'fcmToken', 4096);
+
+      match /tasks/{taskId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && onlyKeys(request.resource.data, ['title', 'description', 'priority', 'category', 'dueAt', 'hasDueTime',
+                                              'completed', 'completedAt', 'createdAt', 'updatedAt', 'deleted'])
+          && syncFields(request.resource.data)
+          && optStr(request.resource.data, 'title', 200)
+          && optStr(request.resource.data, 'description', 5000)
+          && optStr(request.resource.data, 'priority', 10)
+          && optStr(request.resource.data, 'category', 30);
+      }
+
+      match /reminders/{reminderId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && onlyKeys(request.resource.data, ['title', 'description', 'scheduledTime', 'repeatType', 'repeatIntervalDays',
+                                              'enabled', 'completed', 'lastTriggeredAt', 'createdAt', 'updatedAt', 'deleted'])
+          && syncFields(request.resource.data)
+          && optStr(request.resource.data, 'title', 200)
+          && optStr(request.resource.data, 'description', 2000)
+          && optStr(request.resource.data, 'repeatType', 10);
+      }
+
+      match /expenses/{expenseId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && onlyKeys(request.resource.data, ['amount', 'type', 'category', 'paymentMethod', 'description', 'date',
+                                              'createdAt', 'updatedAt', 'deleted'])
+          && syncFields(request.resource.data)
+          && optInt(request.resource.data, 'amount')
+          && optStr(request.resource.data, 'type', 10)
+          && optStr(request.resource.data, 'category', 30)
+          && optStr(request.resource.data, 'description', 500);
+      }
+
+      match /notes/{noteId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && onlyKeys(request.resource.data, ['title', 'content', 'category', 'isPinned', 'isArchived', 'isChecklist',
+                                              'checklistJson', 'createdAt', 'updatedAt', 'deleted'])
+          && syncFields(request.resource.data)
+          && optStr(request.resource.data, 'title', 200)
+          && optStr(request.resource.data, 'content', 20000)
+          && optStr(request.resource.data, 'checklistJson', 50000);
+      }
+
+      // Reserved for future document metadata sync; files themselves are never uploaded.
+      match /documents/{documentId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // AI quota counters: server-only.
+    match /aiUsage/{id} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

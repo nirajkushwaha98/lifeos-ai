@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  LifeOS AI launcher icon - background layer (108x108dp adaptive canvas).
+  Deep-space navy with a blue/purple nebula, a faint HUD grid and a few distant stars.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Base: deep space with a lighter core behind the mark -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="54"
+                android:centerY="46"
+                android:gradientRadius="78">
+                <item android:offset="0" android:color="#FF1C2658" />
+                <item android:offset="0.5" android:color="#FF0E1431" />
+                <item android:offset="1" android:color="#FF060912" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Purple nebula, lower right -->
+    <path android:pathData="M44,92a40,40 0 1,1 80,0a40,40 0 1,1 -80,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="84"
+                android:centerY="92"
+                android:gradientRadius="40">
+                <item android:offset="0" android:color="#558B5CF6" />
+                <item android:offset="1" android:color="#008B5CF6" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Cyan nebula, upper left -->
+    <path android:pathData="M-10,18a34,34 0 1,1 68,0a34,34 0 1,1 -68,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="18"
+                android:gradientRadius="34">
+                <item android:offset="0" android:color="#3322D3EE" />
+                <item android:offset="1" android:color="#0022D3EE" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- HUD grid (12dp pitch, centred on the icon) -->
+    <path
+        android:pathData="M0,6H108M0,18H108M0,30H108M0,42H108M0,54H108M0,66H108M0,78H108M0,90H108M0,102H108M6,0V108M18,0V108M30,0V108M42,0V108M54,0V108M66,0V108M78,0V108M90,0V108M102,0V108"
+        android:strokeWidth="0.35"
+        android:strokeColor="#1F3B82F6" />
+
+    <!-- Distant stars -->
+    <path
+        android:fillColor="#99FFFFFF"
+        android:pathData="M23.3,30a0.7,0.7 0 1,1 1.4,0a0.7,0.7 0 1,1 -1.4,0zM85.4,25a0.6,0.6 0 1,1 1.2,0a0.6,0.6 0 1,1 -1.2,0zM21.5,75a0.5,0.5 0 1,1 1,0a0.5,0.5 0 1,1 -1,0zM87.4,71a0.6,0.6 0 1,1 1.2,0a0.6,0.6 0 1,1 -1.2,0zM78.5,87a0.5,0.5 0 1,1 1,0a0.5,0.5 0 1,1 -1,0zM31.5,88a0.5,0.5 0 1,1 1,0a0.5,0.5 0 1,1 -1,0z" />
+</vector>

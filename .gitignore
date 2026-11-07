@@ -1,0 +1,29 @@
+# Gradle / Android Studio
+.gradle/
+build/
+/app/build/
+/captures
+.externalNativeBuild/
+.cxx/
+*.iml
+.idea/
+.DS_Store
+local.properties
+
+# Secrets - NEVER commit
+app/google-services.json
+keystore.properties
+*.jks
+*.keystore
+backend/functions/.env
+backend/functions/.env.*
+backend/functions/.secret.local
+backend/functions/node_modules/
+backend/.firebase/
+backend/firebase-debug.log
+backend/.firebaserc
+
+# Added for GitHub upload
+.kotlin/
+*.apk
+*.aab
